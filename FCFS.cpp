@@ -1,5 +1,4 @@
-// First Code First Serve (FCFS) with Arrival Time
-// Mounish Sai (https://github.com/pvsmounish)
+
 
 #include<iostream>
 #include<limits>
