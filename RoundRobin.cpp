@@ -1,85 +1,73 @@
 #include<bits/stdc++.h>
-using  namespace  std;
-
-int main()
+using namespace std;
+struct proc
 {
-    #ifndef ONLINE_JUDGE
-    freopen("input.txt","r",stdin);
-    freopen("output.txt","w",stdout);
-    #endif
-
-
-    int n;
-    cin>>n;
-    queue<pair<int,int>>q;
-    int arrv[n],brust[n];
-    for(int i=0;i<n;i++)
-    {
-        int x,y;
-        cin>>x>>y;
-        arrv[i]=x;
-        brust[i]=y;
-        q.push({y,x});
-    }
-    int tq;
-    cin>>tq;
-    int ct[n];
-    int time=0;
-    while(!q.empty())
-    {
-        auto x=q.front();
-        q.pop();
-        int bt=x.first;
-        int at=x.second;
-        if(bt<=tq)
-        {
-            time+=bt;
-            ct[at]=time;
-        }
-        else
-        {
-            time+=tq;
-            bt-=tq;
-            q.push({bt,at});
-        }
-    }
-    cout<<"completion time"<<endl;
-    for(int i=0;i<n;i++)
-    {
-        cout<<i<<" "<<ct[i]<<endl;
-    }
-    cout<<"Turn around Time & Waiting time"<<endl;
-    for(int i=0;i<n;i++)
-    {
-        int p=ct[i]-arrv[i];
-        int q=p- brust[i];
-        cout<<p<<"       "<<q<<endl;
-
-    }
-    
+    int no,at,bt,ct,status;
+};
+struct proc read(int i)
+{
+    cout<<"Process Number-> "<<i<<endl;
+    struct proc p;
+    p.no=i;
+    cin>>p.at>>p.bt;
+    p.status=0;
+    return p;
 
 }
-input
-6
-0 7
-1 4
-2 15
-3 11
-4 20
-5 9
-5
-output:
-completion time
-0 31
-1 9
-2 55
-3 56
-4 66
-5 50
-Turn around Time & Waiting time
-31       24
-8       4
-53       38
-53       42
-62       42
-45       36
+int main()
+{
+    cout<<"Number of Processes : ";
+    int n;
+    cin>>n;
+    struct proc p[10],temp;
+    for(int i=0;i<n;i++)
+    {
+        p[i]=read(i+1);
+    }
+    cout<<"Time Quantum :";
+    int tq;
+    cin>>tq;
+    int rem=n;
+    for(int i=0;i<n;i++)
+    {
+
+        for(int j=0;j<n-1;j++)
+        {
+
+            if(p[j].at>p[j+1].at)
+            {
+                temp=p[j];
+                p[j]=p[j+1];
+                p[j+1]=temp;
+            }
+        }
+    }
+    //for(int i=0;i<n;i++)
+
+    int ct=p[0].at;
+    while(rem!=0)
+    {
+        for(int i=0;i<n;i++)
+        {
+            if(tq>=p[i].bt and p[i].status!=1 and ct>=p[i].at)
+            {
+                ct+=p[i].bt;
+                p[i].status=1;
+                p[i].ct=ct;
+                rem--;
+            }
+            else if(tq<p[i].bt and p[i].status==0 and ct>=p[i].at)
+            {
+                ct+=tq;
+                p[i].bt-=tq;
+            }
+            //cout<<p[i].no<<" "<<ct<<endl;
+        }
+    }
+    for(int i=0;i<n;i++)
+    {
+        cout<<i+1<<" "<<p[i].ct<<endl;
+    }
+
+
+}
