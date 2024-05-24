@@ -1,0 +1,53 @@
+#include<bits/stdc++.h>
+using  namespace  std;
+
+int main()
+{
+
+    int n;
+    cin>>n;
+    queue<pair<int,int>>q;
+    int arrv[n],brust[n];
+    for(int i=0;i<n;i++)
+    {
+        int x,y;
+        cin>>x>>y;
+        arrv[i]=x;
+        brust[i]=y;
+        q.push({y,x});
+    }
+    int tq;
+    cin>>tq;
+    int ct[n];
+    int time=arrv[0];
+    while(!q.empty())
+    {
+        auto x=q.front();
+        q.pop();
+        int bt=x.first;
+        int at=x.second;
+        if(bt<=tq)
+        {
+            time+=bt;
+            ct[at]=time;
+        }
+        else
+        {
+            time+=tq;
+            bt-=tq;
+            q.push({bt,at});
+        }
+    }
+    cout<<"completion time"<<endl;
+    for(int i=0;i<n;i++)
+    {
+        cout<<i<<" "<<ct[arrv[i]]<<endl;
+    }
+    cout<<"Turn around Time & Waiting time"<<endl;
+    for(int i=0;i<n;i++)
+    {
+        int p=ct[arrv[i]]-arrv[i];
+        int q=p- brust[i];
+        cout<<p<<"       "<<q<<endl;
+    }
+}
