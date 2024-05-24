@@ -1,92 +1,69 @@
-
-
-#include<iostream>
-#include<limits>
+#include<bits/stdc++.h>
 using namespace std;
-
-class Process{
-    public:
-        string processName;
-        int arrivalTime;
-        int burstTime;
-
-        int remainingTime;
-
-        int responseTime;
-        int completionTime;
-        
-        int waitingTime;
-        int turnAroundTime;
+struct proc
+{
+    int no,at,bt,ct,status;
 };
+struct proc read(int i)
+{
+    cout<<"Process Number-> "<<i<<endl;
+    struct proc p;
+    p.no=i;
+    cin>>p.at>>p.bt;
+    p.status=0;
+    return p;
 
-int main(){
-    int numOfProcesses;
-    cout << "Enter no. of processes: ";
-    cin >> numOfProcesses;
-
-    Process processes[numOfProcesses];
-
-    for(int n=0;n<numOfProcesses;n++){
-        cout << "\nEnter Process Name for " << (n+1) << ": ";
-        cin >> processes[n].processName;
-        cout << "Enter Arrival Time for Process " << (n+1) << ": ";
-        cin >> processes[n].arrivalTime;
-        cout << "Enter Burst Time for Process " << (n+1) << ": ";
-        cin >> processes[n].burstTime;
+}
+int main()
+{
+    cout<<"Number of Processes : ";
+    int n;
+    cin>>n;
+    struct proc p[10],temp;
+    for(int i=0;i<n;i++)
+    {
+        p[i]=read(i+1);
     }
 
-    cout << "\n" << endl;
+    int rem=n;
+    for(int i=0;i<n;i++)
+    {
 
-    for(int i=0;i<numOfProcesses-1;i++){
-        for(int j=i+1;j<numOfProcesses;j++){
-            if(processes[j].arrivalTime < processes[i].arrivalTime){
-                Process temp = processes[j];
-                processes[j] = processes[i];
-                processes[i] = temp;
+        for(int j=0;j<n-1;j++)
+        {
+
+            if(p[j].at>p[j+1].at)
+            {
+                temp=p[j];
+                p[j]=p[j+1];
+                p[j+1]=temp;
             }
         }
     }
+    int ct=p[0].at;
+    while(rem!=0)
+    {
+        for(int i=0;i<n;)
+        {
 
-    int sumResponseTime = 0;
-    int sumCompletionTime = 0;
-    int sumWaitingTime = 0;
-    int sumTurnAroundTime = 0;
-  
-    
-    int cumulativeSum = 0;
+            if(ct>=p[i].at and p[i].status!=1)
+            {
 
-
-    for(int n=0;n<numOfProcesses;n++){
-        processes[n].waitingTime = cumulativeSum;
-        processes[n].completionTime =  processes[n].waitingTime + processes[n].burstTime;
-        if(n == 0){
-            processes[n].responseTime = 0;
+                ct+=p[i].bt;
+                p[i].ct=ct;
+                p[i].status=1;
+                rem--;
+                i++;
+            }
+            else{
+                ct++;
+            }
         }
-        else{
-            processes[n].responseTime = processes[n-1].completionTime;
-        }
-        
-        processes[n].turnAroundTime = processes[n].completionTime - processes[n].arrivalTime;
-
-        cout << "\nProcess " << processes[n].processName << ":\n";
-        cout << "Response Time: " << processes[n].responseTime << endl;
-        cout << "Completion Time: " << processes[n].completionTime << endl;
-        cout << "Waiting Time: " << processes[n].waitingTime << endl;
-        cout << "Turn Around Time: " << processes[n].turnAroundTime << endl;
-
-        sumResponseTime += processes[n].responseTime;
-        sumCompletionTime += processes[n].completionTime;
-        sumWaitingTime += processes[n].waitingTime;
-        sumTurnAroundTime += processes[n].turnAroundTime;
-
-        cumulativeSum += processes[n].burstTime;
     }
+    for(int i=0;i<n;i++)
+    {
 
-
-    cout << "\n\nAverage Response Time for " << (numOfProcesses) << " Processes: " << (float) sumResponseTime/numOfProcesses;
-    cout << "\n\nAverage Completion Time for " << (numOfProcesses) << " Processes: " << (float) sumCompletionTime/numOfProcesses;
-    cout << "\n\nAverage Waiting Time for " << (numOfProcesses) << " Processes: " << (float) sumWaitingTime/numOfProcesses;
-    cout << "\n\nAverage Turn Around Time for " << (numOfProcesses) << " Processes: " << (float) sumTurnAroundTime/numOfProcesses;
-
-    return 0;
+        cout<<p[i].no<<" "<<p[i].ct<<endl;
+    }
 }
+
