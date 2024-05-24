@@ -54,6 +54,7 @@ int main()
             }
         }
         p[l].ct=ct=ct+=p[l].bt;
+       p[i].status=1;
         cout<<p[l].ct<<endl;rem--;
     }
     
