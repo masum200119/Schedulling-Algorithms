@@ -50,7 +50,7 @@ int main()
     cin>>x>>y>>z;
     int rem=n;
     int j=0;
-    for(;rem!=0;)
+    for(;rem!=0;)// this might be go for infinite loop, check it clearly.
     {
         while(j<n)
         {
